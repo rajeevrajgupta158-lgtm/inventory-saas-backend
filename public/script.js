@@ -1,6 +1,7 @@
 const API = "/api";
 let inventory = [];
 let chart;
+let editingProductId = null;
 
 // ================= LOGIN SYSTEM =================
 
@@ -59,25 +60,45 @@ setTimeout(()=> toast.remove(), 300);
 
 // ================= SAVE PRODUCT =================
 
+// ================= SAVE PRODUCT =================
 async function saveProduct() {
-const product = {
-name: nameInput.value,
-cost: +costInput.value,
-price: +priceInput.value,
-quantity: +quantityInput.value,
-category: categoryInput.value,
-img: ""
-};
+    const product = {
+        name: nameInput.value,
+        cost: +costInput.value,
+        price: +priceInput.value,
+        quantity: +quantityInput.value,
+        category: categoryInput.value,
+        img: ""
+    };
 
-await fetch(`${API}/products`, {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify(product)
-});
+    if (editingProductId) {
+        // 🟡 UPDATE MODE: PUT request bhejo
+        await fetch(`${API}/products/${editingProductId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(product)
+        });
+        showToast("Product Updated Successfully ✅");
+        
+        // Reset state back to Add mode
+        editingProductId = null;
+        const saveBtn = document.getElementById("saveBtn");
+        if(saveBtn) {
+            saveBtn.innerText = "Add Product";
+            saveBtn.style.background = ""; // Reset color
+        }
+    } else {
+        // 🟢 CREATE MODE: Naya add karo
+        await fetch(`${API}/products`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(product)
+        });
+        showToast("Product Added ✅");
+    }
 
-clearForm();
-loadProducts();
-showToast("Product Added ✅");
+    clearForm();
+    loadProducts();
 }
 
 // ================= CLEAR FORM =================
@@ -103,18 +124,27 @@ showToast("Product Deleted 🗑");
 // ================= EDIT =================
 
 function editProduct(index) {
-const p = inventory[index];
+    const p = inventory[index];
 
-nameInput.value = p.name;
-costInput.value = p.cost;
-priceInput.value = p.price;
-quantityInput.value = p.quantity;
-categoryInput.value = p.category;
+    nameInput.value = p.name;
+    costInput.value = p.cost;
+    priceInput.value = p.price;
+    quantityInput.value = p.quantity;
+    categoryInput.value = p.category;
 
-deleteProduct(index);
-showToast("Editing Product ✏");
+    // Delete karne ke bajaye, ID save karo
+    editingProductId = p._id;
+
+    // Button ka text change karke "Update" kar do (Ensure HTML me id="saveBtn" ho)
+    const saveBtn = document.getElementById("saveBtn");
+    if(saveBtn) {
+        saveBtn.innerText = "Update Product";
+        saveBtn.style.background = "#eab308"; // Make it yellow/warning color
+    }
+
+    showToast("Editing Product ✏");
+    window.scrollTo(0, 0); // User ko top form par scroll karwao
 }
-
 // ================= STOCK =================
 
 async function stockIn(index) {
