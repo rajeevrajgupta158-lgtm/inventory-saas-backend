@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Scan Action</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Special mobile-only overrides */
+        body { display: flex; justify-content: center; align-items: center; text-align: center; }
+        .mobile-card { width: 90%; max-width: 400px; padding: 40px 20px; }
+        .giant-btn { font-size: 30px; width: 60px; height: 60px; border-radius: 50%; margin: 10px 20px; }
+        .stock-display { font-size: 50px; font-weight: bold; color: #4f46e5; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="card mobile-card" id="content">
+        <h2 id="pName">Loading...</h2>
+        <p style="color: #ccc;">Current Stock Level</p>
+        <div class="stock-display" id="pStock">--</div>
+        
+        <div>
+            <button onclick="updateStock('out')" class="danger giant-btn">-</button>
+            <button onclick="updateStock('in')" class="success giant-btn">+</button>
+        </div>
+        <p id="statusMsg" style="margin-top: 20px; color: #22c55e;"></p>
+    </div>
+
+    <script>
+        // 1. Get the Product ID from the URL the QR code generated
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const API = "/api";
+
+        // 2. Fetch the latest stock on load
+        async function loadProduct() {
+            const res = await fetch(`${API}/products`);
+            const allProducts = await res.json();
+            const p = allProducts.find(item => item._id === productId);
+            
+            if(p) {
+                document.getElementById("pName").innerText = p.name;
+                document.getElementById("pStock").innerText = p.quantity;
+            } else {
+                document.getElementById("pName").innerText = "Product Not Found";
+            }
+        }
+
+        // 3. The massive mobile buttons hit your backend directly!
+        async function updateStock(action) {
+            await fetch(`${API}/products/stock/${action}/${productId}`, { method: "PATCH" });
+            document.getElementById("statusMsg").innerText = "Database Updated! ✅";
+            
+            // Flash effect and reload number
+            setTimeout(() => document.getElementById("statusMsg").innerText = "", 2000);
+            loadProduct();
+        }
+
+        loadProduct();
+    </script>
+</body>
+</html>

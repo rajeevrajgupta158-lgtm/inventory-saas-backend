@@ -1,0 +1,151 @@
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+min-height:100vh;
+}
+
+.hidden{display:none;}
+
+.login-card{
+max-width:400px;
+margin:80px auto;
+}
+
+header{
+padding:20px 40px;
+background:rgba(255,255,255,0.05);
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:16px;
+margin:20px;
+box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.stat{font-size:20px;font-weight:bold;margin-top:5px;}
+
+input,select{
+width:100%;
+padding:10px;
+margin:6px 0;
+border:none;
+border-radius:8px;
+}
+
+button{
+padding:8px 12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:3px;
+background:#4f46e5;
+color:white;
+}
+
+.primary{background:#3b82f6;}
+.success{background:#22c55e;}
+.danger{background:#ef4444;}
+.warning{background:#f59e0b;}
+
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+th,td{padding:10px;text-align:left;}
+th{background:rgba(255,255,255,0.1);}
+
+.badge{padding:4px 8px;border-radius:6px;font-size:12px;}
+.low{background:#ef4444;}
+.medium{background:#f59e0b;}
+.good{background:#22c55e;}
+
+.product-img{
+width:60px;
+height:60px;
+border-radius:10px;
+object-fit:cover;
+}
+
+.controls{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:10px;
+}
+
+/* Extra Views */
+.product-card{
+background:rgba(255,255,255,0.07);
+padding:15px;
+border-radius:15px;
+margin:10px;
+}
+
+.card-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.compact-item{
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+display:flex;
+justify-content:space-between;
+}
+
+.summary-box{
+background:rgba(255,255,255,0.06);
+padding:20px;
+border-radius:12px;
+margin:10px 0;
+}
+
+/* ================= PREMIUM SHINE EFFECT ================= */
+
+.shine-effect {
+position: relative;
+overflow: hidden;
+cursor: pointer;
+transition: transform 0.15s ease;
+}
+
+.shine-effect::before {
+content: "";
+position: absolute;
+top: 0;
+left: -75%;
+width: 50%;
+height: 100%;
+background: linear-gradient(
+120deg,
+rgba(255,255,255,0.1) 0%,
+rgba(255,255,255,0.6) 50%,
+rgba(255,255,255,0.1) 100%
+);
+transform: skewX(-25deg);
+transition: left 0.5s ease;
+}
+
+.shine-effect:hover::before {
+left: 130%;
+}
+
+/* ================= CLICK POP EFFECT ================= */
+
+.pop-click:active {
+transform: scale(0.95);
+}
+
+.pop-click {
+transition: transform 0.1s ease;
+}

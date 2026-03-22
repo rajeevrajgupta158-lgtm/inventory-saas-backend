@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Inventory SaaS</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="card login-card">
+<h2>Login</h2>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+<header>
+<h2> INVENTORY MANAGEMENT SYSTEM </h2>
+<button onclick="logout()" class="danger">Logout</button>
+</header>
+
+<!-- DASHBOARD -->
+<div class="card dashboard">
+<div>Total Products<div id="totalProducts" class="stat">0</div></div>
+<div>Total Value<div id="totalValue" class="stat">₹0</div></div>
+<div>Total Profit<div id="totalProfit" class="stat">₹0</div></div>
+<div>Low Stock<div id="lowStock" class="stat">0</div></div>
+</div>
+
+<!-- ADD PRODUCT -->
+<div class="card">
+<h3>Add / Edit Product</h3>
+<input type="hidden" id="editIndex">
+<input id="nameInput" placeholder="Product Name">
+<input id="costInput" type="number" placeholder="Cost">
+<input id="priceInput" type="number" placeholder="Price">
+<input id="quantityInput" type="number" placeholder="Quantity">
+<input id="categoryInput" placeholder="Category">
+<input id="imageFile" type="file">
+<button onclick="saveProduct()" class="primary">Save Product</button>
+</div>
+
+<!-- CONTROLS -->
+<div class="card controls">
+
+<select id="viewMode" onchange="changeViewMode()">
+<option value="table">Table View</option>
+<option value="cards">Cards View</option>
+<option value="list">Compact List</option>
+<option value="chart">Chart Only</option>
+<option value="summary">Summary Analytics</option>
+</select>
+
+<input id="searchInput" placeholder="Search..." onkeyup="renderTable()">
+
+<select id="filterCategory" onchange="renderTable()">
+<option value="">All Categories</option>
+</select>
+
+<select id="sortBy" onchange="renderTable()">
+<option value="">Sort By</option>
+<option value="price">Price</option>
+<option value="quantity">Quantity</option>
+</select>
+
+<select id="chartType" onchange="updateChart()">
+<option value="bar">Bar</option>
+<option value="line">Line</option>
+<option value="doughnut">Doughnut</option>
+<option value="pie">Pie</option>
+</select>
+
+<button onclick="exportCSV()" class="success">Export CSV</button>
+<input type="file" id="csvFile" accept=".csv">
+<button onclick="handleCSVUpload()" class="primary">Import CSV</button>
+<button onclick="clearAll()" class="danger">Clear All</button>
+
+</div>
+
+<!-- DATA CONTAINERS -->
+<div id="tableContainer" class="card">
+<table>
+<thead>
+<tr>
+<th>Image</th><th>Name</th><th>Price</th><th>Qty</th>
+<th>Category</th><th>Profit</th><th>Status</th><th>Actions</th>
+</tr>
+</thead>
+<tbody id="inventoryTable"></tbody>
+</table>
+</div>
+
+<div id="cardContainer" class="card hidden"></div>
+<div id="listContainer" class="card hidden"></div>
+<div id="summaryContainer" class="card hidden"></div>
+
+<div id="chartContainer" class="card">
+<canvas id="chart"></canvas>
+</div>
+
+<!-- INVOICE -->
+<div class="card">
+    <h3>Generate Invoice</h3>
+    <select id="invoiceProduct"></select>
+    <input id="invoiceQty" type="number" placeholder="Quantity">
+    
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button onclick="generateInvoice()" class="success" style="flex: 1;">Show Invoice</button>
+        <button onclick="downloadInvoice()" class="primary" style="flex: 1;">Download .txt</button>
+    </div>
+</div>
+<div id="qrModal" class="card hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.8);">
+    <h3 id="qrTitle">Scan to Manage</h3>
+    <p style="font-size: 12px; color: #ccc;">Point any smartphone camera here</p>
+    
+    <div id="qrcode" style="margin: 20px auto; background: white; padding: 15px; border-radius: 8px; display: inline-block;"></div>
+    <br>
+    <button onclick="document.getElementById('qrModal').classList.add('hidden')" class="danger" style="width: 100%;">Close</button>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
